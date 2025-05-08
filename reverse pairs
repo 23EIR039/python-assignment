@@ -1,0 +1,59 @@
+class Solution(object):
+    def reversePairs(self, nums):
+        arr = nums
+        
+        def merge(arr, low, mid, high):
+            temp = []
+            i = low
+            j = mid + 1
+            # cnt = 0
+
+            while i <= mid and j <= high:
+                # if arr[i] > 2 * arr[j]:
+                #     cnt += j - mid
+                if arr[i] <= arr[j]:
+                    temp.append(arr[i])
+                    i += 1
+                else:
+                    temp.append(arr[j])
+                    j += 1
+            
+            while j <= high:
+                temp.append(arr[j])
+                j += 1
+
+            while i <= mid:
+                temp.append(arr[i])
+                # if arr[i] > 2 * arr[high]:
+                #     cnt += high - mid
+                i += 1
+            
+            for i in range(low, high + 1):
+                # print(i, i - low, low, high,mid, temp)
+                arr[i] = temp[i-low]
+            
+        
+        def countPairs(arr, low, mid, high):
+            cnt = 0
+            right = mid + 1
+            for i in range(low, mid+1):
+                while(right <= high and arr[i] > 2 * arr[right]):
+                    right += 1
+                cnt += right - mid - 1
+            return cnt
+
+        def mergeSort(arr, low, high):
+            if low == high:
+                return 0
+            cnt = 0
+            mid = (low + high) // 2
+
+            cnt += mergeSort(arr,low, mid)
+            cnt += mergeSort(arr, mid + 1, high)
+            cnt += countPairs(arr, low, mid, high)
+            merge(arr, low, mid, high)
+
+            return cnt
+        
+        return mergeSort(arr, 0, len(arr)-1)
+        
