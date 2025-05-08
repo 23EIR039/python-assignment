@@ -1,0 +1,42 @@
+class Solution(object):
+    def gameOfLife(self, board):
+        """
+        :type board: List[List[int]]
+        :rtype: None Do not return anything, modify board in-place instead.
+        """
+        m = len(board)
+        n = len(board[0])
+        should_live = []
+
+        for j in range(m):
+            line = []
+            for i in range(n):
+                if self.live(board, i, j):
+                    line.append(True)
+                else:
+                    line.append(False)
+            should_live.append(line)
+        
+        for j in range(m):
+            for i in range(n):
+                if should_live[j][i]:
+                    board[j][i] = 1
+                else: 
+                    board[j][i] = 0
+
+    
+    def live(self, board, x, y):
+        m = len(board)
+        n = len(board[0])
+        neighbors = []
+        for j in [y - 1, y, y + 1]:
+            for i in [x - 1, x, x + 1]:
+                if i >= 0 and j >= 0 and i <= n - 1 and j <= m - 1:
+                    if i != x or j != y:
+                        neighbors.append(board[j][i])
+        number_neighbors = sum(neighbors)
+        if (number_neighbors >= 2 and number_neighbors <=3 and board[y][x] == 1) or (number_neighbors == 3 and board[y][x] == 0):
+            return True
+        return False
+
+        
