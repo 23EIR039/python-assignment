@@ -1,0 +1,39 @@
+class Solution(object):
+    def findNthDigit(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        #1-9 consumes 1 digit
+        #10-99 consumes 2 digits
+        #100-999 consumes 3 digits
+        #intgers less than 10^i consumes i digits
+        #integers >= 10^i consumes i+1 digits
+
+        #first locate i
+        #then locate which number
+        #finally locate and return the digit
+
+        #locate i
+        i = 0
+        accumulated_digits = 0
+        while accumulated_digits < n:
+            current_digits = (10**(i+1)-10**(i))*(i+1)
+            accumulated_digits += current_digits
+            i += 1
+        i -= 1 #change i back because we have now exceed n
+        accumulated_digits -= (10**(i+1)-10**(i))*(i+1) #similarly, change accumulated_digits back
+
+        #locate the number, n-accumulated_digits will be the number of digits to be covered/went through, divided by i+1 will be the number of numbers to go over until reach n
+        number_to_go = int( (n-accumulated_digits)/(i+1) )
+        mod = (n-accumulated_digits) % (i+1)
+        step_further = 0
+        if mod > 0:
+            step_further = 1
+        target_number = 10**(i) + (number_to_go-1) + step_further
+
+        #find the mod'th digit in target_number
+        target_str = str(target_number)
+        target_digit = target_str[mod-1]
+        target_digit = int(target_digit)
+        return(target_digit)
